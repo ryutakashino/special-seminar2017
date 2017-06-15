@@ -9,5 +9,5 @@ IPのソースコードはmyip_v1_0_S00_AXI.v
 
 
 IPの編集画面はこんな感じ。
-![](./myip_v1_0_v1_0_project - [c__users_ryuta_documents_vivado_2016.1_0607a_myip_0607a_myip.tmp_myip_v1_0_v1_0_project_myip_v1_0_v1_0_project.xpr] - Vivado 2016.1 2017_06_15 20_50_20.png)
+![](./myip_v1_0_v1_0_project.png)
 
