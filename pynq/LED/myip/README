@@ -1,5 +1,5 @@
 次のようなmyip.bitをfpgaに読み込ませてLEDを光らせた。動作確認の記録は「自作IPでの回路の動作確認.ipynb」にある。
-![](./00607A_MYIP%20-%20EditIP%5BC__Users_ryuta_Documents_vivado_2016.1_0607A_MYIP_0607A_MYIP.xpr%5D%20-%20Vivado%202016.1%202017_06_15%2020_54_13.png)
+![](././00607A_MYIP./00607A_MYIP)
 ![](./pynq_diagram.png)
 
 
