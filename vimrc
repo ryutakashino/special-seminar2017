@@ -28,7 +28,7 @@ inoremap <C-l>  <right>
 nnoremap == gg=G    "=を二回連続入力でバッファ全体をインデント整理
 
 set list
-set listchars=tab:»-,trail:-,nbsp:-,eol:↲
+set listchars=tab:»-,trail:-,nbsp:-
 nnoremap <silent><C-t> :NERDTreeToggle<CR>
 
 "文字コードをUFT-8に設定
