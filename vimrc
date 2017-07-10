@@ -128,3 +128,7 @@ NeoBundleCheck
 "
 syntax on 
 colorscheme molokai
+
+inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><C-l>     neocomplete#complete_common_string()
+inoremap <expr><C-i>     neocomplete#complete_common_string()
