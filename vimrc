@@ -113,6 +113,7 @@ if neobundle#tap('vim-quickrun') "{{{
 endif "}}}
 " NERDTreeを設定                  <----- 追記
 NeoBundle 'scrooloose/nerdtree'
+NeoBundle 'Shougo/neocomplete.vim'
 
 call neobundle#end()
  
