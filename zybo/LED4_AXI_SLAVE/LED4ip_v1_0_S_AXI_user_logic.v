@@ -27,7 +27,7 @@ end
 
 // Contents
 // LED_Display_Counter
-always @(posedge S_AXI_ACLK9 begin : proc_LED_Display_Counter
+always @(posedge S_AXI_ACLK) begin : proc_LED_Display_Counter
     if (~S_AXI_ARESETN) begin
         LED_Display_Counter <= 4'd0;
     end else begin
