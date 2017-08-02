@@ -391,14 +391,14 @@
 
 	// Add user logic here
 	reg [3:0] out;
-    always @(posedge S_AXI_ACLK,or negedge S_AXI_ARESETN) begin
+    always @(posedge S_AXI_ACLK or negedge S_AXI_ARESETN) begin
         if (!S_AXI_ARESETN) begin
             out <=4'b0000;
-            slv_reg[0] <= 1'b0;
+            slv_reg0[0] <= 1'b0;
          end else begin
-             if (slv_reg[0]) begin //Start ADD
-                 out <= slv_reg1[2:0] + slv_reg[2:0];
-                 slv_reg[0] <= 1'b0; //Done
+             if (slv_reg0[0]) begin //Start ADD
+                 out <= slv_reg1[2:0] + slv_reg2[2:0];
+                 slv_reg0[0] <= 1'b0; //Done
              end
          end
     end
