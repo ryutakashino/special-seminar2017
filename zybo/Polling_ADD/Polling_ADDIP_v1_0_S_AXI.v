@@ -390,19 +390,16 @@
 	end    
 
 	// Add user logic here
-	reg [3:0] out;
-    always @(posedge S_AXI_ACLK or negedge S_AXI_ARESETN) begin
-        if (!S_AXI_ARESETN) begin
-            out <=4'b0000;
-            slv_reg0[0] <= 1'b0;
-         end else begin
-             if (slv_reg0[0]) begin //Start ADD
-                 out <= slv_reg1[2:0] + slv_reg2[2:0];
-                 slv_reg0[0] <= 1'b0; //Done
-             end
+	wire [3:0] sum;
+	assign sum = slv_reg1[2:0] + slv_reg2[2:0];
+	
+    always @(posedge S_AXI_ACLK) begin
+         if (slv_reg0[0]) begin //Start ADD
+             slv_reg3[3:0]<=sum;
+             slv_reg0[0] <= 1'b0; //Done          
          end
     end
-    assign LED4bit = out;
+    assign LED4bit = sum;
 	// User logic ends
 
 	endmodule
