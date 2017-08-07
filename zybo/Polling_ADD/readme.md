@@ -13,9 +13,6 @@ CPUとFPGAの通信を行うためにValid&Readyレジスタを用いる。Valid
 処理の流れを図にした。  
 <img src="./polliing.png" width="500">
 
-#### 疑問
-- 初期状態によっては01となり得る。実行前にリセットを掛けるべきだろうか。
-- 
 
 #### HW側
 ```
@@ -41,18 +38,18 @@ CPUとFPGAの通信を行うためにValid&Readyレジスタを用いる。Valid
 	else if (slv_reg0[0]) begin //if Valid bit is true, start ADD.
             slv_reg3[3:0] <= rslt;
             if (Delay_Counter == 32'd0)
-              slv_reg0[1]   <= 1'b1; //Done. Ready bit <= true.      
+              slv_reg0[1]   <= 1'b1; //Done. Ready bit　= true.      
         end
       end
 ```
 #### SW側
 ```
-        base[0] = 0b01;
-	while(base[0]!=0b11){
-	    printf("*");
+        base[0] = 0b01;　// Validビットを1
+	while(base[0]!=0b11){ // Readyビットが1になるとループをぬける
+	    printf("*");
 	}
 	printf("\n sum(slv_reg3[3:0]) is %d\n", base[3]);
-	base[0] = 0b00;
+	base[0] = 0b00; //初期状態に戻す
 
 ```
 
