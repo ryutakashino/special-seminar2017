@@ -199,6 +199,23 @@
 	    end 
 	end       
 
+
+
+    reg [31:0] Delay_Counter;// Delay calcuration time
+    always @(posedge S_AXI_ACLK) begin
+        if ( S_AXI_ARESETN == 1'b0 ) begin
+          Delay_Counter <= 32'd0;
+        end else begin
+          if (slv_reg0[0]) begin
+            if (Delay_Counter == 32'd0)
+              Delay_Counter <= 32'd50000000;
+            else
+              Delay_Counter <= Delay_Counter - 32'd1;
+          end else
+            Delay_Counter <= 32'd50000000;
+        end
+    end
+	
 	// Implement memory mapped register select and write logic generation
 	// The write data is accepted and written to memory mapped registers when
 	// axi_awready, S_AXI_WVALID, axi_wready and S_AXI_WVALID are asserted. Write strobes are used to
@@ -207,58 +224,69 @@
 	// Slave register write enable is asserted when valid address and data are available
 	// and the slave is ready to accept the write address and write data.
 	assign slv_reg_wren = axi_wready && S_AXI_WVALID && axi_awready && S_AXI_AWVALID;
-
+	
+    wire [3:0] rslt;
+    assign rslt = slv_reg1[2:0] + slv_reg2[2:0];
+    assign LED4bit = rslt;
+    
 	always @( posedge S_AXI_ACLK )
-	begin
-	  if ( S_AXI_ARESETN == 1'b0 )
-	    begin
-	      slv_reg0 <= 0;
-	      slv_reg1 <= 0;
-	      slv_reg2 <= 0;
-	      slv_reg3 <= 0;
-	    end 
-	  else begin
-	    if (slv_reg_wren)
-	      begin
-	        case ( axi_awaddr[ADDR_LSB+OPT_MEM_ADDR_BITS:ADDR_LSB] )
-	          2'h0:
-	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
-	              if ( S_AXI_WSTRB[byte_index] == 1 ) begin
-	                // Respective byte enables are asserted as per write strobes 
-	                // Slave register 0
-	                slv_reg0[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
-	              end  
-	          2'h1:
-	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
-	              if ( S_AXI_WSTRB[byte_index] == 1 ) begin
-	                // Respective byte enables are asserted as per write strobes 
-	                // Slave register 1
-	                slv_reg1[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
-	              end  
-	          2'h2:
-	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
-	              if ( S_AXI_WSTRB[byte_index] == 1 ) begin
-	                // Respective byte enables are asserted as per write strobes 
-	                // Slave register 2
-	                slv_reg2[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
-	              end  
-	          2'h3:
-	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
-	              if ( S_AXI_WSTRB[byte_index] == 1 ) begin
-	                // Respective byte enables are asserted as per write strobes 
-	                // Slave register 3
-	                slv_reg3[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
-	              end  
-	          default : begin
-	                      slv_reg0 <= slv_reg0;
-	                      slv_reg1 <= slv_reg1;
-	                      slv_reg2 <= slv_reg2;
-	                      slv_reg3 <= slv_reg3;
-	                    end
+    begin
+      if ( S_AXI_ARESETN == 1'b0 )
+        begin
+          slv_reg0 <= 0;
+          slv_reg1 <= 0;
+          slv_reg2 <= 0;
+          slv_reg3 <= 0;
+        end 
+      else begin
+        if (slv_reg_wren)
+          begin
+            case ( axi_awaddr[ADDR_LSB+OPT_MEM_ADDR_BITS:ADDR_LSB] )
+              2'h0:
+                for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
+                  if ( S_AXI_WSTRB[byte_index] == 1 ) begin
+                    // Respective byte enables are asserted as per write strobes 
+                    // Slave register 0
+                    slv_reg0[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
+                  end  
+              2'h1:
+                for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
+                  if ( S_AXI_WSTRB[byte_index] == 1 ) begin
+                    // Respective byte enables are asserted as per write strobes 
+                    // Slave register 1
+                    slv_reg1[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
+                  end  
+              2'h2:
+                for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
+                  if ( S_AXI_WSTRB[byte_index] == 1 ) begin
+                    // Respective byte enables are asserted as per write strobes 
+                    // Slave register 2
+                    slv_reg2[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
+                  end  
+              2'h3:
+                for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
+                  if ( S_AXI_WSTRB[byte_index] == 1 ) begin
+                    // Respective byte enables are asserted as per write strobes 
+                    // Slave register 3
+                    slv_reg3[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
+                  end  
+              default : begin
+                          slv_reg0 <= slv_reg0;
+                          slv_reg1 <= slv_reg1;
+                          slv_reg2 <= slv_reg2;
+                          slv_reg3 <= slv_reg3;
+                        end
 	        endcase
-	      end
-	  end
-	end    
+	        
+	      end 
+	    else if (slv_reg0[0]) begin //if Valid bit is true, start ADD.
+                  slv_reg3[3:0] <= rslt;
+                  if (Delay_Counter == 32'd0)
+                    slv_reg0[1]   <= 1'b1; //Done. Ready bit <= true.      
+        end
+      end
+	end
+	    
 
 	// Implement write response logic generation
 	// The write response and response valid signals are asserted by the slave 
@@ -388,18 +416,4 @@
 	        end   
 	    end
 	end    
-
-	// Add user logic here
-	wire [3:0] sum;
-	assign sum = slv_reg1[2:0] + slv_reg2[2:0];
-	
-        always @(posedge S_AXI_ACLK) begin
-          if (slv_reg0[0]) begin //Start ADD
-            slv_reg3[3:0]<=sum;
-            slv_reg0[0] <= 1'b0; //Done          
-          end
-        end
-        assign LED4bit = sum;
-	// User logic ends
-
 endmodule
