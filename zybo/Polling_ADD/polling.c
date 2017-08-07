@@ -27,7 +27,7 @@ int main(){
         fprintf(stderr, "/dev/uio0 open error\n");
         exit(-1);
     }
-    base = (volatile unsigned int *)mmap(NULL, 0x10000, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
+    base = (volatile unsigned int *)mmap(NULL, 0x10000, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);/*FPGAのレジスタをマッピング*/
     if (!base){
         fprintf(stderr, "LED4 mmap error \n");
         exit(-1);
@@ -37,7 +37,7 @@ int main(){
         printf("please enter arguments (0-7)\n");
 	printf("in1(slv_reg1[2:0]):");
 	scanf("%x", &val);
-	base[1] = val;
+	base[1] = val; /*引数を入力*/
 	
         printf("in2(slv_reg2[2:0]):");
 	scanf("%x", &val);
@@ -46,12 +46,12 @@ int main(){
 	printf("\n");
         
         printf("START\n");
-        base[0] = 0b01;
-	while(base[0]!=0b11){
-	    printf("*");
+　　　　　　　　　　　　　　　　base[0] = 0b01;　/*Validビットを1*/
+	while(base[0]!=0b11){ /*Readyビットが1になるとループをぬける*/
+	    printf("*");
 	}
 	printf("\n sum(slv_reg3[3:0]) is %d\n", base[3]);
-	base[0] = 0b00;
+	base[0] = 0b00; /*初期状態に戻す*/
         
         printf("END \n\n\n");
     }
