@@ -1,6 +1,9 @@
 ## 開発日記
 
-CPUとFPGAの通信を行うためにValid&Readyレジスタを用いる。Valid&ReadyレジスタはValidビットとReadyビットの2bitからなる。ValidビットはSW側の準備が整ったことをHW側に知らせるともので、オペランド（足し算の引数）の設定が終わるとValidビットを１にする。ReadyビットはHW側の演算完了をSW側に知らせるのもので、和の計算が終了するとReadyビットを1にする。  
+
+
+### ポーリングの実装
+CPUとFPGAの通信を行うためにValid&Readyレジスタを用いる。Valid&ReadyレジスタはValidビットとReadyビットの2bitからなる。ValidビットはSW側の準備が整ったことをHW側に知らせるともので、オペランド（足し算の引数）の設定が終わるとValidビットを１にする。ReadyビットはHW側の演算完了をSW側に知らせるのもので、和の計算が終了するとReadyビットを1にする。 
 全ての処理が終了し、和が求まったときのValidビット、Readyビットはともに1である。
   
 処理の流れとValid&Readyレジスタの中身の変化は次のようになる。
@@ -44,12 +47,12 @@ CPUとFPGAの通信を行うためにValid&Readyレジスタを用いる。Valid
 ```
 #### SW側
 ```
-        base[0] = 0b01;　// Validビットを1
-	while(base[0]!=0b11){ // Readyビットが1になるとループをぬける
-	    printf("*");
+　　　　　　　　　　　　　　　　base[0] = 0b01;　/*Validビットを1*/
+	while(base[0]!=0b11){ /*Readyビットが1になるとループをぬける*/
+	    printf("*");
 	}
 	printf("\n sum(slv_reg3[3:0]) is %d\n", base[3]);
-	base[0] = 0b00; //初期状態に戻す
+	base[0] = 0b00; /*初期状態に戻す*/
 
 ```
 
