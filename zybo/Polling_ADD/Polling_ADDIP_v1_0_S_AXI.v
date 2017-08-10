@@ -229,7 +229,7 @@
     assign rslt = slv_reg1[2:0] + slv_reg2[2:0];
     assign LED4bit = rslt;
     
-	always @( posedge S_AXI_ACLK )
+    always @( posedge S_AXI_ACLK )
     begin
       if ( S_AXI_ARESETN == 1'b0 )
         begin
@@ -276,16 +276,16 @@
                           slv_reg2 <= slv_reg2;
                           slv_reg3 <= slv_reg3;
                         end
-	        endcase
-	        
-	      end 
-	    else if (slv_reg0[0]) begin //if Valid bit is true, start ADD.
+	      endcase
+	     end
+	      
+	   else if (slv_reg0[0]) begin //if Valid bit is true, start ADD.
                   slv_reg3[3:0] <= rslt;
                   if (Delay_Counter == 32'd0)
                     slv_reg0[1]   <= 1'b1; //Done. Ready bit <= true.      
-        end
-      end
-	end
+           end
+          end
+       end
 	    
 
 	// Implement write response logic generation
@@ -294,7 +294,7 @@
 	// This marks the acceptance of address and indicates the status of 
 	// write transaction.
 
-	always @( posedge S_AXI_ACLK )
+        always @( posedge S_AXI_ACLK )
 	begin
 	  if ( S_AXI_ARESETN == 1'b0 )
 	    begin
